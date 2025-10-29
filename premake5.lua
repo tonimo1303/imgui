@@ -1,12 +1,17 @@
 project "ImGui"
     kind "StaticLib"
-    staticruntime "off"
+    staticruntime "on"
 
     language "C++"
     cppdialect "C++17"
 
     targetdir ("Builds/" .. outputdir .. "Linked/")
     objdir ("Builds/" .. outputdir .. "Intermediate/")
+
+    includedirs
+    {
+        "."
+    }
 
     files
     {
@@ -16,7 +21,7 @@ project "ImGui"
         "./*.cpp",
         "premake5.lua"
     }
-    
+
     if (os.target() == "windows") then
         files
         {
@@ -24,7 +29,7 @@ project "ImGui"
             "./backends/imgui_impl_win32.cpp"
         }
     end
-    
+
     if (os.target() == "macosx") then
         files
         {
@@ -32,7 +37,7 @@ project "ImGui"
             "./backends/imgui_impl_osx.mm"
         }
     end
-    
+
     for _, renderer in ipairs(renderers) do
         if renderer == "d3d12" then
             files
@@ -41,6 +46,13 @@ project "ImGui"
                 "./backends/imgui_impl_dx12.cpp"
             }
         elseif renderer == "vulkan" then
+            local vulkansdk = os.getenv("VULKAN_SDK")
+
+            includedirs
+            {
+                (vulkansdk .. "/include")
+            }
+
             files
             {
                 "./backends/imgui_impl_vulkan.h",
