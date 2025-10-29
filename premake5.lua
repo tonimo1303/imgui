@@ -2,17 +2,19 @@ project "ImGui"
     kind "StaticLib"
     staticruntime "off"
 
-    language "c++"
-    cppdialect "c++17"
+    language "C++"
+    cppdialect "C++17"
 
     targetdir ("Builds/" .. outputdir .. "Linked/")
     objdir ("Builds/" .. outputdir .. "Intermediate/")
 
     files
     {
-        "./premake5.lua",
         "./*.h",
+        "./*.hpp",
         "./*.c",
+        "./*.cpp",
+        "premake5.lua"
     }
     
     if (os.target() == "windows") then
